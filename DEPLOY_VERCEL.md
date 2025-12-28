@@ -140,4 +140,3 @@ Certifique-se de adicionar a URL da Vercel nas configurações do Google OAuth:
 - [Documentação Vercel](https://vercel.com/docs)
 - [Next.js na Vercel](https://vercel.com/docs/frameworks/nextjs)
 - [Prisma na Vercel](https://www.prisma.io/docs/guides/deployment/deployment-guides/deploying-to-vercel)
-
