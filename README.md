@@ -1,36 +1,140 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FitPro - Plataforma de Treinos para Personal Trainers
 
-## Getting Started
+Uma plataforma moderna para personal trainers organizarem e compartilharem treinos com seus alunos.
 
-First, run the development server:
+## Funcionalidades
+
+### Para Professores (Personal Trainers)
+- ✅ Dashboard com visão geral de programas e alunos
+- ✅ Criação de programas de treino estruturados (Semanas > Dias > Exercícios)
+- ✅ Embed de vídeos do YouTube para demonstração de exercícios
+- ✅ Gerenciamento de alunos (adicionar por email ou convite)
+- ✅ Sistema de códigos de convite para novos alunos
+
+### Para Alunos
+- ✅ Visualização dos treinos atribuídos
+- ✅ Navegação por semana e dia
+- ✅ Player de vídeo integrado para cada exercício
+- ✅ Detalhes de séries, repetições e descanso
+
+## Tech Stack
+
+- **Framework**: Next.js 16 (App Router)
+- **Autenticação**: NextAuth.js com Google OAuth
+- **Banco de Dados**: SQLite com Prisma ORM
+- **UI**: Tailwind CSS + shadcn/ui
+- **Linguagem**: TypeScript
+
+## Configuração
+
+### 1. Instalar dependências
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Configurar variáveis de ambiente
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Copie o arquivo `.env.example` para `.env` e configure:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```env
+# Database
+DATABASE_URL="file:./dev.db"
 
-## Learn More
+# NextAuth
+AUTH_SECRET="gere-uma-chave-secreta-aqui"
 
-To learn more about Next.js, take a look at the following resources:
+# Google OAuth (obtenha em https://console.cloud.google.com)
+AUTH_GOOGLE_ID="seu-google-client-id"
+AUTH_GOOGLE_SECRET="seu-google-client-secret"
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# App URL
+NEXTAUTH_URL="http://localhost:3000"
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 3. Configurar Google OAuth
 
-## Deploy on Vercel
+1. Acesse [Google Cloud Console](https://console.cloud.google.com)
+2. Crie um novo projeto ou selecione um existente
+3. Vá em "APIs & Services" > "Credentials"
+4. Clique em "Create Credentials" > "OAuth 2.0 Client IDs"
+5. Configure as URIs autorizadas:
+   - Authorized JavaScript origins: `http://localhost:3000`
+   - Authorized redirect URIs: `http://localhost:3000/api/auth/callback/google`
+6. Copie o Client ID e Client Secret para o `.env`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 4. Inicializar o banco de dados
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npx prisma migrate dev
+```
+
+### 5. Iniciar o servidor de desenvolvimento
+
+```bash
+pnpm dev
+```
+
+Acesse [http://localhost:3000](http://localhost:3000)
+
+## Estrutura do Projeto
+
+```
+app/
+├── (auth)/                  # Páginas de autenticação
+│   ├── login/
+│   └── escolher-tipo/
+├── (dashboard)/             # Área logada
+│   ├── professor/           # Dashboard do professor
+│   │   ├── programas/       # CRUD de programas
+│   │   ├── alunos/          # Gestão de alunos
+│   │   └── convites/        # Códigos de convite
+│   └── aluno/               # Dashboard do aluno
+│       └── treinos/         # Visualização de treinos
+├── api/                     # API Routes
+│   ├── auth/
+│   ├── programs/
+│   ├── exercises/
+│   ├── students/
+│   └── invites/
+└── convite/[code]/          # Página de convite
+
+components/
+├── ui/                      # Componentes shadcn/ui
+├── dashboard/               # Componentes do dashboard
+└── youtube-embed.tsx        # Player do YouTube
+
+lib/
+├── auth.ts                  # Configuração NextAuth
+├── prisma.ts                # Cliente Prisma
+└── utils.ts                 # Utilitários
+```
+
+## Fluxo de Uso
+
+### Professor
+1. Faça login com Google
+2. Escolha "Sou Personal Trainer"
+3. Crie um programa de treino
+4. Adicione semanas, dias e exercícios
+5. Convide alunos por código ou email
+6. Atribua programas aos alunos
+
+### Aluno
+1. Receba um código de convite do seu professor
+2. Acesse o link do convite
+3. Faça login com Google
+4. Visualize seus treinos na dashboard
+
+## Próximos Passos (Roadmap)
+
+- [ ] Tracking de progresso do aluno
+- [ ] Notificações por email
+- [ ] PWA para acesso mobile
+- [ ] Upload de vídeos próprios
+- [ ] Histórico de treinos realizados
+- [ ] Métricas e relatórios
+
+## Licença
+
+MIT

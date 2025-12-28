@@ -1,0 +1,180 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  TEACHER
+  STUDENT
+}
+
+// NextAuth models
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// User model (extended for NextAuth)
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  role          Role      @default(STUDENT)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts Account[]
+  sessions Session[]
+
+  // Teacher relations
+  courses     Course[]
+  inviteCodes InviteCode[]
+
+  // Student relations (enrollments)
+  enrollments Enrollment[]
+}
+
+// Invite codes for students to join (optional - can be used for discounts or free access)
+model InviteCode {
+  id          String    @id @default(cuid())
+  code        String    @unique
+  used        Boolean   @default(false)
+  usedAt      DateTime?
+  usedByEmail String?
+  createdAt   DateTime  @default(now())
+  expiresAt   DateTime?
+
+  // Can be linked to a specific course for auto-enrollment
+  courseId String?
+  course   Course? @relation(fields: [courseId], references: [id], onDelete: SetNull)
+
+  teacherId String
+  teacher   User   @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+}
+
+// Course (training course/program)
+model Course {
+  id          String   @id @default(cuid())
+  name        String
+  description String?  @db.Text
+  thumbnail   String?  // URL for course thumbnail image
+  isActive    Boolean  @default(true)
+  isPublic    Boolean  @default(true)  // If true, appears in course catalog
+  price       Decimal   @default(0)     @db.Decimal(10, 2) // Price in BRL (e.g., 99.99)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  teacherId String
+  teacher   User   @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+
+  weeks       Week[]
+  enrollments Enrollment[]
+  inviteCodes InviteCode[]
+}
+
+// Week within a course (module)
+model Week {
+  id         String   @id @default(cuid())
+  weekNumber Int
+  name       String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  days Day[]
+
+  @@unique([courseId, weekNumber])
+}
+
+// Day within a week (lesson/workout)
+model Day {
+  id        String   @id @default(cuid())
+  dayNumber Int
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  weekId String
+  week   Week   @relation(fields: [weekId], references: [id], onDelete: Cascade)
+
+  exercises Exercise[]
+
+  @@unique([weekId, dayNumber])
+}
+
+// Exercise within a day
+model Exercise {
+  id         String   @id @default(cuid())
+  name       String
+  youtubeUrl String?
+  notes      String?  @db.Text
+  sets       Int?
+  reps       String? // Can be "8-12" or "10" or "AMRAP"
+  rest       String? // Rest time like "60s" or "2min"
+  orderIndex Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  dayId String
+  day   Day    @relation(fields: [dayId], references: [id], onDelete: Cascade)
+}
+
+// Enrollment - links users to courses
+model Enrollment {
+  id        String    @id @default(cuid())
+  startDate DateTime  @default(now())
+  endDate   DateTime?
+  isActive  Boolean   @default(true)
+  isPaid    Boolean   @default(false) // For future payment integration
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([courseId, userId])
+}
