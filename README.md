@@ -31,7 +31,7 @@ Uma plataforma moderna para personal trainers criarem e venderem cursos de trein
 
 ## 📋 Pré-requisitos
 
-- Node.js 18+ 
+- Node.js 18+
 - pnpm (ou npm/yarn)
 - Conta no Google Cloud Console (para OAuth)
 - Banco PostgreSQL (recomendado: [Neon](https://neon.tech))

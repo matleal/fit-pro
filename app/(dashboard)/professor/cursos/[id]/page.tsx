@@ -2,6 +2,7 @@ import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { notFound, redirect } from 'next/navigation';
 import { CourseEditor } from './course-editor';
+import { decimalToNumber } from '@/lib/utils';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -48,5 +49,11 @@ export default async function CursoDetalhesPage({ params }: PageProps) {
     notFound();
   }
 
-  return <CourseEditor course={course} />;
+  // Convert Decimal to number for the component
+  const courseWithNumberPrice = {
+    ...course,
+    price: decimalToNumber(course.price),
+  };
+
+  return <CourseEditor course={courseWithNumberPrice} />;
 }

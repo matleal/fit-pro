@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { decimalToNumber } from '@/lib/utils';
 import {
   Calendar,
   Globe,
@@ -173,9 +174,9 @@ export default async function CursosPage() {
                       </>
                     )}
                   </Badge>
-                  {course.price > 0 && (
+                  {decimalToNumber(course.price) > 0 && (
                     <Badge className="bg-yellow-500/20 text-yellow-400">
-                      R$ {(course.price / 100).toFixed(2)}
+                      R$ {(decimalToNumber(course.price) / 100).toFixed(2)}
                     </Badge>
                   )}
                 </div>

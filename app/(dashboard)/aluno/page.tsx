@@ -1,12 +1,13 @@
-import { auth } from "@/lib/auth";
-import { redirect } from "next/navigation";
-import { prisma } from "@/lib/prisma";
-import Link from "next/link";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Calendar, Dumbbell, ArrowRight, Library } from "lucide-react";
+import { auth } from '@/lib/auth';
+import { redirect } from 'next/navigation';
+import { prisma } from '@/lib/prisma';
+import Link from 'next/link';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Calendar, Dumbbell, ArrowRight, Library } from 'lucide-react';
+import type { Prisma } from '@prisma/client';
 
 export default async function AlunoDashboardPage() {
   const session = await auth();
@@ -28,10 +29,10 @@ export default async function AlunoDashboardPage() {
             select: { id: true, name: true, image: true },
           },
           weeks: {
-            orderBy: { weekNumber: "asc" },
+            orderBy: { weekNumber: 'asc' },
             include: {
               days: {
-                orderBy: { dayNumber: "asc" },
+                orderBy: { dayNumber: 'asc' },
                 include: {
                   _count: {
                     select: { exercises: true },
@@ -44,6 +45,29 @@ export default async function AlunoDashboardPage() {
       },
     },
   });
+
+  type EnrollmentWithCourse = Prisma.EnrollmentGetPayload<{
+    include: {
+      course: {
+        include: {
+          teacher: {
+            select: { id: true; name: true; image: true };
+          };
+          weeks: {
+            include: {
+              days: {
+                include: {
+                  _count: {
+                    select: { exercises: true };
+                  };
+                };
+              };
+            };
+          };
+        };
+      };
+    };
+  }>;
 
   return (
     <div className="p-4 sm:p-6 lg:p-8">
@@ -89,7 +113,7 @@ export default async function AlunoDashboardPage() {
           <div className="space-y-4">
             <h2 className="text-lg font-semibold text-white">Meus Cursos</h2>
 
-            {enrollments.map((enrollment) => (
+            {enrollments.map((enrollment: EnrollmentWithCourse) => (
               <Card key={enrollment.id} className="bg-zinc-900 border-zinc-800">
                 <CardHeader>
                   <div className="flex items-start justify-between">
