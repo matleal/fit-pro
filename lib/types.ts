@@ -6,4 +6,3 @@ export const Role = {
   TEACHER: 'TEACHER' as const,
   STUDENT: 'STUDENT' as const,
 } as const;
-
