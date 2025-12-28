@@ -1,10 +1,10 @@
 import { auth } from '@/lib/auth';
+import { Role } from '@/lib/types';
 import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Dumbbell, Users, Video, BookOpen, Library } from 'lucide-react';
-import { Role } from '@prisma/client';
 
 export default async function HomePage() {
   const session = await auth();
@@ -20,7 +20,7 @@ export default async function HomePage() {
     const isNewUser = dbUser &&
       new Date().getTime() - new Date(dbUser.createdAt).getTime() < 5 * 60 * 1000;
 
-    if (isNewUser && dbUser.role === Role.STUDENT) {
+    if (isNewUser && dbUser && dbUser.role === Role.STUDENT) {
       // Check if they have any enrollments (meaning they joined via invite)
       const hasEnrollments = await prisma.enrollment.findFirst({
         where: { userId: session.user.id },
