@@ -118,7 +118,7 @@ export function WorkoutViewer({ program, initialWeek }: WorkoutViewerProps) {
       {currentWeek && (
         <Tabs defaultValue={currentWeek.days[0]?.id} className="space-y-6">
           <TabsList className="bg-zinc-900 border border-zinc-800 p-1 w-full justify-start">
-            {currentWeek.days.map((day) => (
+            {currentWeek.days.map((day: Day) => (
               <TabsTrigger
                 key={day.id}
                 value={day.id}
@@ -130,7 +130,7 @@ export function WorkoutViewer({ program, initialWeek }: WorkoutViewerProps) {
             ))}
           </TabsList>
 
-          {currentWeek.days.map((day) => (
+          {currentWeek.days.map((day: Day) => (
             <TabsContent key={day.id} value={day.id}>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Exercises list */}
@@ -144,7 +144,7 @@ export function WorkoutViewer({ program, initialWeek }: WorkoutViewerProps) {
                         Nenhum exercício neste dia
                       </p>
                     ) : (
-                      day.exercises.map((exercise, index) => (
+                      day.exercises.map((exercise: Exercise, index: number) => (
                         <button
                           key={exercise.id}
                           onClick={() => setSelectedExercise(exercise)}

@@ -35,7 +35,7 @@ export async function GET() {
     });
 
     // Map to include isEnrolled flag
-    const coursesWithEnrollment = courses.map((course) => ({
+    const coursesWithEnrollment = courses.map((course: typeof courses[0]) => ({
       id: course.id,
       name: course.name,
       description: course.description,

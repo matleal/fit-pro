@@ -39,6 +39,8 @@ export default async function ProfessorDashboardPage() {
     }),
   ]);
 
+  type RecentCourse = typeof recentCourses[0];
+
   return (
     <div className="p-4 sm:p-6 lg:p-8">
       {/* Header */}
@@ -132,7 +134,7 @@ export default async function ProfessorDashboardPage() {
             </div>
           ) : (
             <div className="space-y-3">
-              {recentCourses.map((course) => (
+              {recentCourses.map((course: RecentCourse) => (
                 <Link
                   key={course.id}
                   href={`/professor/cursos/${course.id}`}

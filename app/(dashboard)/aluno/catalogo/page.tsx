@@ -71,7 +71,7 @@ export default function CatalogoPage() {
       if (response.ok) {
         // Update local state
         setCourses((prev) =>
-          prev.map((course) =>
+          prev.map((course: Course) =>
             course.id === courseId
               ? { ...course, isEnrolled: true, enrollmentCount: course.enrollmentCount + 1 }
               : course
@@ -142,7 +142,7 @@ export default function CatalogoPage() {
         </Card>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredCourses.map((course) => (
+          {filteredCourses.map((course: Course) => (
             <Card
               key={course.id}
               className="bg-zinc-900 border-zinc-800 hover:border-zinc-700 transition-colors overflow-hidden"

@@ -137,9 +137,9 @@ export function CourseEditor({ course: initialCourse }: CourseEditorProps) {
 
       setCourse((prev) => ({
         ...prev,
-        weeks: prev.weeks.map((week) => ({
+        weeks: prev.weeks.map((week: Week) => ({
           ...week,
-          days: week.days.map((day) =>
+          days: week.days.map((day: Day) =>
             day.id === dayId
               ? { ...day, exercises: [...day.exercises, newExercise] }
               : day
@@ -172,13 +172,13 @@ export function CourseEditor({ course: initialCourse }: CourseEditorProps) {
 
       setCourse((prev) => ({
         ...prev,
-        weeks: prev.weeks.map((week) => ({
+        weeks: prev.weeks.map((week: Week) => ({
           ...week,
-          days: week.days.map((day) =>
+          days: week.days.map((day: Day) =>
             day.id === dayId
               ? {
                   ...day,
-                  exercises: day.exercises.map((ex) =>
+                  exercises: day.exercises.map((ex: Exercise) =>
                     ex.id === exerciseId ? updatedExercise : ex
                   ),
                 }
@@ -208,11 +208,11 @@ export function CourseEditor({ course: initialCourse }: CourseEditorProps) {
 
       setCourse((prev) => ({
         ...prev,
-        weeks: prev.weeks.map((week) => ({
+        weeks: prev.weeks.map((week: Week) => ({
           ...week,
-          days: week.days.map((day) =>
+          days: week.days.map((day: Day) =>
             day.id === dayId
-              ? { ...day, exercises: day.exercises.filter((ex) => ex.id !== exerciseId) }
+              ? { ...day, exercises: day.exercises.filter((ex: Exercise) => ex.id !== exerciseId) }
               : day
           ),
         })),
@@ -297,7 +297,7 @@ export function CourseEditor({ course: initialCourse }: CourseEditorProps) {
       {/* Week tabs */}
       <Tabs value={selectedWeek} onValueChange={setSelectedWeek} className="space-y-6">
         <TabsList className="bg-zinc-900 border border-zinc-800 p-1 flex-wrap h-auto gap-1">
-          {course.weeks.map((week) => (
+          {course.weeks.map((week: Week) => (
             <TabsTrigger
               key={week.id}
               value={week.id}
@@ -308,11 +308,11 @@ export function CourseEditor({ course: initialCourse }: CourseEditorProps) {
           ))}
         </TabsList>
 
-        {course.weeks.map((week) => (
+        {course.weeks.map((week: Week) => (
           <TabsContent key={week.id} value={week.id} className="space-y-6">
             {/* Days grid */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {week.days.map((day) => (
+              {week.days.map((day: Day) => (
                 <Card key={day.id} className="bg-zinc-900 border-zinc-800">
                   <CardHeader className="pb-3">
                     <div className="flex items-center justify-between">
@@ -334,7 +334,7 @@ export function CourseEditor({ course: initialCourse }: CourseEditorProps) {
                         Nenhum exercício adicionado
                       </p>
                     ) : (
-                      day.exercises.map((exercise) => (
+                      day.exercises.map((exercise: Exercise) => (
                         <div
                           key={exercise.id}
                           className="flex items-start gap-3 p-3 rounded-lg bg-zinc-800/50 hover:bg-zinc-800 transition-colors group"

@@ -166,7 +166,7 @@ export default function ConvitesPage() {
               <h2 className="text-lg font-semibold text-white">
                 Convites Pendentes ({pendingInvites.length})
               </h2>
-              {pendingInvites.map((invite) => (
+              {pendingInvites.map((invite: InviteCode) => (
                 <Card key={invite.id} className="bg-zinc-900 border-zinc-800">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
@@ -225,7 +225,7 @@ export default function ConvitesPage() {
               <h2 className="text-lg font-semibold text-zinc-400">
                 Convites Utilizados ({usedInvites.length})
               </h2>
-              {usedInvites.map((invite) => (
+              {usedInvites.map((invite: InviteCode) => (
                 <Card key={invite.id} className="bg-zinc-900/50 border-zinc-800">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">

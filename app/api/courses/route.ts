@@ -60,7 +60,7 @@ export async function GET() {
       },
     });
 
-    const courses = enrollments.map((e) => e.course);
+    const courses = enrollments.map((e: typeof enrollments[0]) => e.course);
     return NextResponse.json(courses);
   } catch (error) {
     console.error('Error fetching courses:', error);
