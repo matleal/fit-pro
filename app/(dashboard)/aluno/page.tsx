@@ -123,7 +123,7 @@ export default async function AlunoDashboardPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {enrollment.course.weeks.map((week) => (
+                    {enrollment.course.weeks.map((week: EnrollmentWithCourse['course']['weeks'][0]) => (
                       <Link
                         key={week.id}
                         href={`/aluno/cursos/${enrollment.course.id}?semana=${week.weekNumber}`}
@@ -136,7 +136,7 @@ export default async function AlunoDashboardPage() {
                           <ArrowRight className="w-4 h-4 text-zinc-600 group-hover:text-emerald-400 transition-colors" />
                         </div>
                         <div className="space-y-2">
-                          {week.days.map((day) => (
+                          {week.days.map((day: EnrollmentWithCourse['course']['weeks'][0]['days'][0]) => (
                             <div key={day.id} className="flex items-center justify-between text-sm">
                               <span className="text-zinc-400">{day.name}</span>
                               <span className="text-zinc-600">{day._count.exercises} exercícios</span>
