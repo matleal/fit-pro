@@ -55,7 +55,7 @@ export async function GET(
     const isTeacher =
       session.user.role === 'TEACHER' && course.teacherId === session.user.id;
     const isEnrolled = course.enrollments.some(
-      (e) => e.userId === session.user.id
+      (e: typeof course.enrollments[0]) => e.userId === session.user.id
     );
 
     if (!isTeacher && !isEnrolled && !course.isPublic) {

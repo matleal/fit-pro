@@ -80,7 +80,7 @@ export default function ConvitesPage() {
       });
 
       if (response.ok) {
-        setInvites((prev) => prev.filter((inv) => inv.id !== id));
+        setInvites((prev) => prev.filter((inv: InviteCode) => inv.id !== id));
       }
     } catch (error) {
       console.error(error);
@@ -94,8 +94,8 @@ export default function ConvitesPage() {
     setTimeout(() => setCopiedId(null), 2000);
   }
 
-  const pendingInvites = invites.filter((i) => !i.used);
-  const usedInvites = invites.filter((i) => i.used);
+  const pendingInvites = invites.filter((i: InviteCode) => !i.used);
+  const usedInvites = invites.filter((i: InviteCode) => i.used);
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 max-w-4xl">

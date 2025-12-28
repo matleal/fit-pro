@@ -92,7 +92,7 @@ export function CourseEditor({ course: initialCourse }: CourseEditorProps) {
   const [exerciseDialogOpen, setExerciseDialogOpen] = useState(false);
   const [editingExercise, setEditingExercise] = useState<Partial<Exercise> | null>(null);
 
-  const currentWeek = course.weeks.find((w) => w.id === selectedWeek);
+  const currentWeek = course.weeks.find((w: Week) => w.id === selectedWeek);
 
   async function saveCourse() {
     setIsSaving(true);

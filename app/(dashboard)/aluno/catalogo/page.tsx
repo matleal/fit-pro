@@ -89,7 +89,7 @@ export default function CatalogoPage() {
     }
   }
 
-  const filteredCourses = courses.filter((course) =>
+  const filteredCourses = courses.filter((course: Course) =>
     course.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     course.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
     course.teacher.name?.toLowerCase().includes(searchQuery.toLowerCase())
