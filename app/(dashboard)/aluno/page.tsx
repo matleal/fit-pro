@@ -7,7 +7,6 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Calendar, Dumbbell, ArrowRight, Library } from 'lucide-react';
-import type { Prisma } from '@prisma/client';
 
 export default async function AlunoDashboardPage() {
   const session = await auth();
@@ -46,28 +45,7 @@ export default async function AlunoDashboardPage() {
     },
   });
 
-  type EnrollmentWithCourse = Prisma.EnrollmentGetPayload<{
-    include: {
-      course: {
-        include: {
-          teacher: {
-            select: { id: true; name: true; image: true };
-          };
-          weeks: {
-            include: {
-              days: {
-                include: {
-                  _count: {
-                    select: { exercises: true };
-                  };
-                };
-              };
-            };
-          };
-        };
-      };
-    };
-  }>;
+  type EnrollmentWithCourse = typeof enrollments[0];
 
   return (
     <div className="p-4 sm:p-6 lg:p-8">
